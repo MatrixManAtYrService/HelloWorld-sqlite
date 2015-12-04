@@ -10,7 +10,7 @@ int main()
 
 	cout << something;
 
-	cout << "Press ENTER to continue...";
+	cout << "Press ENTER to continue...";                   // this is necessary for when the program is run in a window
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 	return 0;
