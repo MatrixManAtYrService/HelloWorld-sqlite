@@ -13,7 +13,7 @@ echo "!.gitignore" >> .gitignore &&
 # -m (vanilla configuration, Makefile only)
 if [[ $1 == -*[mM]* ]] ; then
     # The IDE's specify the build type internally, but it would seem that Make wants it explicitly
-    cmake .. -DCMAKE_BUILD_TYPE=Debug
+    cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
 
 # -v (Visual Studio 2015)
 elif [[ $1 == -*[vV]* ]] ; then
