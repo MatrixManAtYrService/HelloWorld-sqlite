@@ -1,4 +1,5 @@
 #include <string>
+#include <stdexcept>
 #include "helloPrinter.h"
 using namespace std;
 
@@ -7,7 +8,7 @@ string HelloPrinter::Hello()
     return "Hello world!\n";
 }
 
-string HelloPrinter::Goodbye()
+void HelloPrinter::FailHorribly()
 {
-    return "Goodby cruel world.\n";
+    throw std::out_of_range("Useful Error Message");
 }

@@ -10,8 +10,8 @@ echo "!.gitignore" >> .gitignore &&
 
 # If you'd like to make persistent, configuration-specific, changes, consider putting those files in a new repository and then adding it as a subrepo.  That way, carting around environment-specific files is optional. Feel free to do this for convenience, but keep in mind that mission-critical changes should go through CMakeLists.txt so that we don't break platform-independence.
 
-# -m (vanilla configuration, Makefile only)
-if [[ $1 == -*[mM]* ]] ; then
+# -g (GNU Make)
+if [[ $1 == -*[gG]* ]] ; then
     # The IDE's specify the build type internally, but it would seem that Make wants it explicitly
     cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
 
@@ -19,11 +19,6 @@ if [[ $1 == -*[mM]* ]] ; then
 elif [[ $1 == -*[vV]* ]] ; then
     echo "configuring ./build/ for Visual Studio"
     cmake .. -G "Visual Studio 14 2015 Win64"
-
-# -b (Borland)
-elif [[ $1 == -*[bB]* ]] ; then
-    echo "configuring ./build/ for Borland"
-    cmake .. -G "Borland Makefiles"
 
 # -e (Eclipse)
 elif [[ $1 == -*[eE]* ]] ; then
@@ -41,9 +36,8 @@ else
     echo "Usage: configure [OPTION]"
     echo ""
     echo  "<none>                   Display this message"
-    echo  "-m                       CRun cmake with no flags, puts Makefile in ./build"
+    echo  "-g                       CRun cmake with no flags, puts Makefile in ./build"
     echo  "-v                       Configure build directory for Visual Studio 2015 (Win64)"
-    echo  "-b                       Configure build directory for Borland" 
     echo  "-e                       Configure build directory for Eclipse" 
 
 fi

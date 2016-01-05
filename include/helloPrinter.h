@@ -2,13 +2,14 @@
 #define HELLO_PRINTER_H
 
 #include <string>
+#include <stdexcept>
 using namespace std;
 
 class HelloPrinter
 {
     public:
     string Hello();
-    string Goodbye();
+    void FailHorribly();
 };
 
 #endif
