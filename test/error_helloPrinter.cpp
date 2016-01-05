@@ -1,5 +1,5 @@
 #define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE "HelloPrinter output tests"
+#define BOOST_TEST_MODULE "HelloPrinter error tests"
 
 #include <string>
 #include <stdexcept>
@@ -24,7 +24,4 @@ BOOST_AUTO_TEST_CASE(Error)
 {
     HelloPrinter printer;
     BOOST_CHECK_THROW(printer.FailHorribly(), std::out_of_range);
-
-    //This test passes, unless you un-comment this:
-    //printer.FailHorribly();
 }
