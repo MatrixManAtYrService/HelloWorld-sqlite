@@ -1,43 +1,65 @@
 #include <stdio.h>
+#include <iostream>
 #include <string>
+#include <vector>
 #include "sqlite3/sqlite3.h"
 #include "dbAccess.h"
 
 using namespace std;
 
-int callback(void *NotUsed, int argc, char **argv, char **azColName)
+
+// thanks to stackoverflow user: mah for this method.  Explanation:
+// http://stackoverflow.com/questions/14437433/proper-use-of-callback-function-of-sqlite3-in-c
+int c_callback(void *param, int argc, char **argv, char **azColName)
 {
-  int i;
-  for(i=0; i<argc; i++)
-  {
-    printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-  }
-  printf("\n");
-  return 0;
+    DBAccess* caller = reinterpret_cast<DBAccess*>(param);
+    caller->callback(argc, argv, azColName);
+    return 0;
 }
 
-int DBAccess::RunScript(string dbName, string sql)
+void DBAccess::callback(int argc, char **argv, char **azColName)
+{
+    results.cells.clear();
+    results.cells.reserve(argc);
+
+    int i;
+    for(i=0; i<argc; i++)
+    {
+        queryCell cell;
+        cell.colName = string(azColName[i]);
+        cell.value = string(argv[i] ? argv[i] : "NULL");
+        results.cells.push_back(cell);
+    }
+
+}
+
+// This method based on: http://www.sqlite.org/quickstart.html
+queryResults DBAccess::RunScript(string dbName, string sql)
 {
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc;
-
-    int returnVal = 0;
 
     rc = sqlite3_open(dbName.c_str(), &db);
     if( rc )
     {
         fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
         sqlite3_close(db);
-        return(1);
+        results.err = 1;
+        return(results);
     }
-    rc = sqlite3_exec(db, sql.c_str(), callback, 0, &zErrMsg);
+    rc = sqlite3_exec(db, sql.c_str(), c_callback, this, &zErrMsg);
     if( rc!=SQLITE_OK )
     {
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
-        returnVal = 1;
+        results.err = 2;
+    }
+    else
+    {
+        results.err = 0;     // success
     }
     sqlite3_close(db);
-    return returnVal;
+
+    return results;
 }
