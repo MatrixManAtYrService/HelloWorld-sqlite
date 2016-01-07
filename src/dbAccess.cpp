@@ -19,10 +19,10 @@ int c_callback(void *param, int argc, char **argv, char **azColName)
 
 void DBAccess::callback(int argc, char **argv, char **azColName)
 {
-    results.cells.clear();
-    results.cells.reserve(argc);
 
     int i;
+    results.cells.reserve(argc);
+
     for(i=0; i<argc; i++)
     {
         queryCell cell;
@@ -30,12 +30,16 @@ void DBAccess::callback(int argc, char **argv, char **azColName)
         cell.value = string(argv[i] ? argv[i] : "NULL");
         results.cells.push_back(cell);
     }
-
 }
 
 // This method based on: http://www.sqlite.org/quickstart.html
 queryResults DBAccess::RunScript(string dbName, string sql)
 {
+    // clear any old results
+    results.cells.clear();
+    // I had race-condition-like trouble when I did this immediately before cells.reserve (above).  Moving it here fixed it, I wish I knew why.  TODO: understand this
+
+
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc;

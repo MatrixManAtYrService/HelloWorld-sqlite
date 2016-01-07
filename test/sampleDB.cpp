@@ -45,15 +45,14 @@ BOOST_AUTO_TEST_CASE(DBReadWriteIntegity_Basic)
     BOOST_CHECK_EQUAL(db.RunScript(dbName, insert).err, 0);
 
     cout << "Fetching Value:       " << retrieve << endl;
-    auto results = db.RunScript(dbName, retrieve);
-    BOOST_CHECK_EQUAL(results.err, 0);
+    auto results1 = db.RunScript(dbName, retrieve);
+    auto results2 = db.RunScript(dbName, retrieve);
+    BOOST_CHECK_EQUAL(results2.err, 0);
 
-    for(auto &result : results.cells)
-{
-    cout << "colName" << result.colName;
-    cout << "value" << result.value;
-}
-
+    for (auto &cell : results2.cells)
+    {
+        cout << "XXX" << cell.value << "XXX\n";
+    }
 
  
 }
