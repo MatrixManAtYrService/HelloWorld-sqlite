@@ -1,3 +1,5 @@
+project(helloWorld)
+
 cmake_minimum_required(VERSION 2.8.9)
 
 # Compiled libraries go in ./build/lib
@@ -17,8 +19,6 @@ elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wconversion -pedantic")
 endif()
 
-# Declare "helloWorld" as C++ project
-project(helloWorld CXX)
 
 # look for header files in ./include
 SET(INCLUDE_DIRS "include")
@@ -30,26 +30,31 @@ list(APPEND INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
 SET(BOOST_LINK_FLAG "-lboost_unit_test_framework")
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${BOOST_LINK_FLAG}" )
 
+# Use SQLite3
+add_library(sqlite3
+    include/sqlite3/sqlite3.c)
+set_target_properties(sqlite3 PROPERTIES LINKER_LANGUAGE C)
+
+#
+find_package(Threads REQUIRED)
 
 # List source files here
 set(HELLO_SOURCE 
-    src/main.cpp 
-    src/helloPrinter.cpp)
-#include/helloPrinter.h 
-
+    src/main.cpp)
 
 # List test dependencies here
 add_library(testDepends 
-    src/helloPrinter.cpp 
-    src/goodbyePrinter.cpp)
-
+    src/dbAccess.cpp)
 set_target_properties(testDepends PROPERTIES LINKER_LANGUAGE CXX)
+target_link_libraries(testDepends sqlite3 ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
 
 list(REMOVE_DUPLICATES INCLUDE_DIRS)
 include_directories(${INCLUDE_DIRS})
 
+project(helloWorld C CXX)
 list(REMOVE_DUPLICATES HELLO_SOURCE)
 add_executable(hello.exe ${HELLO_SOURCE})
+target_link_libraries(hello.exe sqlite3 ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
 
 # Look for tests in ./test
 # source for this loop: http://neyasystems.com/an-engineers-guide-to-unit-testing-cmake-and-boost-unit-tests/
@@ -59,7 +64,8 @@ foreach(testSrc ${TEST_SRCS})
         add_executable(${testName} ${testSrc})
 
         #link to Boost libraries AND your targets and dependencies
-        target_link_libraries(${testName} ${Boost_LIBRARIES} testDepends)
+        target_link_libraries(${testName} ${Boost_LIBRARIES} ${SQLITE_LIBRARY} sqlite3 testDepends)
+  
 
         # Compiled test binaries go in ./testBin
         set_target_properties(${testName} PROPERTIES 

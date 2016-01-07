@@ -46,3 +46,4 @@ To install it from source and get a newer version:
 ### [Installation In Windows](http://www.boost.org/doc/libs/1_60_0/more/getting_started/windows.html)
 
 I got this working by using `msvc`, the Microsoft compiler (which I had installed anyway).  Will add installation notes here next time I do this.
+sudo apt-get install libsqlite3-dev

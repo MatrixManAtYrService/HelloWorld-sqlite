@@ -1,6 +1,9 @@
 #include <stdio.h>
+#include <string>
 #include "sqlite3/sqlite3.h"
 #include "dbAccess.h"
+
+using namespace std;
 
 int callback(void *NotUsed, int argc, char **argv, char **azColName)
 {
@@ -13,34 +16,28 @@ int callback(void *NotUsed, int argc, char **argv, char **azColName)
   return 0;
 }
 
-int main(int argc, char** argv)
+int DBAccess::RunScript(string dbName, string sql)
 {
-    if (argc != 3)
-    {
-        fprintf(stderr, "uses 2 args");
-        return 0;
-    }
-
-    char* dbName = argv[1];
-    char* sql = argv[2];
-
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc;
 
-    rc = sqlite3_open(dbName, &db);
+    int returnVal = 0;
+
+    rc = sqlite3_open(dbName.c_str(), &db);
     if( rc )
     {
         fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
         sqlite3_close(db);
         return(1);
     }
-    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+    rc = sqlite3_exec(db, sql.c_str(), callback, 0, &zErrMsg);
     if( rc!=SQLITE_OK )
     {
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
+        returnVal = 1;
     }
     sqlite3_close(db);
-    return 0;
+    return returnVal;
 }

@@ -1,4 +1,0 @@
-[submodule "include/ThirdParty/test"]
-	path = include/ThirdParty/test
-	url = https://github.com/boostorg/test.git
-    ignore = dirty
