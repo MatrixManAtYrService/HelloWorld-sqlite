@@ -25,9 +25,9 @@ BOOST_AUTO_TEST_CASE(DBReadWriteIntegity_Basic)
 {
     string dbName = "test.db";
 
-    string create = "create table [fish] ( [one] text, [two] text );";
+    string create = "create table [fish] ( [seuss1] text, [seuss2] text );";
 
-    string insert = "insert into [fish] ( [one], [two] ) values "
+    string insert = "insert into [fish] ( [seuss1], [seuss2] ) values "
     "('one fish', 'two fish')"
     ",('red fish', 'blue fish');";
 
@@ -45,14 +45,20 @@ BOOST_AUTO_TEST_CASE(DBReadWriteIntegity_Basic)
     BOOST_CHECK_EQUAL(db.RunScript(dbName, insert).err, 0);
 
     cout << "Fetching Value:       " << retrieve << endl;
-    auto results1 = db.RunScript(dbName, retrieve);
-    auto results2 = db.RunScript(dbName, retrieve);
-    BOOST_CHECK_EQUAL(results2.err, 0);
+    auto results = db.RunScript(dbName, retrieve);
+    BOOST_CHECK_EQUAL(results.err, 0);
 
-    for (auto &cell : results2.cells)
-    {
-        cout << "XXX" << cell.value << "XXX\n";
-    }
+    BOOST_CHECK_EQUAL(results.cells[0].colName, "seuss1");
+    BOOST_CHECK_EQUAL(results.cells[0].value, "one fish");
+
+    BOOST_CHECK_EQUAL(results.cells[1].colName, "seuss2");
+    BOOST_CHECK_EQUAL(results.cells[1].value, "two fish");
+
+    BOOST_CHECK_EQUAL(results.cells[2].colName, "seuss1");
+    BOOST_CHECK_EQUAL(results.cells[2].value, "red fish");
+
+    BOOST_CHECK_EQUAL(results.cells[3].colName, "seuss2");
+    BOOST_CHECK_EQUAL(results.cells[3].value, "blue fish");
 
  
 }

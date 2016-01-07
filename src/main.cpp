@@ -1,46 +1,17 @@
-#include <stdio.h>
-#include "sqlite3/sqlite3.h"
-#include "dbAccess.h"
+#include "helloPrinter.h"
+#include <iostream>
+#include <limits>
+using namespace std;
 
-int callback(void *NotUsed, int argc, char **argv, char **azColName)
+int main()
 {
-  int i;
-  for(i=0; i<argc; i++)
-  {
-    printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-  }
-  printf("\n");
-  return 0;
-}
+	HelloPrinter printer;
+    string something = printer.Hello();
 
-int main(int argc, char** argv)
-{
-    if (argc != 3)
-    {
-        fprintf(stderr, "uses 2 args");
-        return 0;
-    }
+	cout << something;
 
-    char* dbName = argv[1];
-    char* sql = argv[2];
+	cout << "Press ENTER to continue...";
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    sqlite3 *db;
-    char *zErrMsg = 0;
-    int rc;
-
-    rc = sqlite3_open(dbName, &db);
-    if( rc )
-    {
-        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-        sqlite3_close(db);
-        return(1);
-    }
-    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
-    if( rc!=SQLITE_OK )
-    {
-        fprintf(stderr, "SQL error: %s\n", zErrMsg);
-        sqlite3_free(zErrMsg);
-    }
-    sqlite3_close(db);
-    return 0;
+	return 0;
 }

@@ -40,7 +40,8 @@ find_package(Threads REQUIRED)
 
 # List source files here
 set(HELLO_SOURCE 
-    src/main.cpp)
+    src/main.cpp
+    src/helloPrinter.cpp)
 
 # List test dependencies here
 add_library(testDepends 
