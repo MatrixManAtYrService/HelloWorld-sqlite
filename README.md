@@ -17,8 +17,6 @@ CMakeLists.txt is configured to use Boost's unit testing framework, and some sam
 
 1. Make sure you have the [dependencies](dependency.md) installed.  
 2. Clone the repository
-3. `chmod +x configure.sh` (so the script is executable)
-4. `chmod +x reconfigure.sh` (this one too)
 5. run `configure.sh` which will give you some options
 6. run `configure.sh <flag> to indicate your environment of choice, this will create a build environment for you in the ./build folder
 7. `cd build`
