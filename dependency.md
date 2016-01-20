@@ -47,3 +47,8 @@ To install it from source and get a newer version:
 
 I got this working by using `msvc`, the Microsoft compiler (which I had installed anyway).  Will add installation notes here next time I do this.
 sudo apt-get install libsqlite3-dev
+
+## Database Access uses Sqlite3
+
+sudo apt-get install sqlite3git@github.com:MatrixManAtYrService/HelloWorld.git
+sudo apt-get install libsqlite3-dev
