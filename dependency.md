@@ -62,12 +62,20 @@ The above prefix will put the libraries in C:\lib\boost_1_60_0\ Feel free to cha
 
 ## Database Access uses [Sqlite3](http://sqlite.org)
 
+The file `cmake/FindSQLite3.cmake` describes how to find the sqlite3 library for several standard installation paths.  If the library is installed to a standard location, cmake should find it.  CMakeLists.txt should be all set up for this.
+
+If sqlite3 is not found in this way (the Windows case), it may have to be built separately.  The code is included in `include/sqlite3` and the steps should be similar to the Windows instructions below.
+
 ## Installation in Linux
 
     sudo apt-get install sqlite3 libsqlite3-dev
 
 ## [Installation in Windows](http://www.boost.org/doc/libs/1_60_0/more/getting_started/windows.html)
 
+1. Have visual studio installed (be sure to select "Visual C++", it's not a default option)
+2. Open a VS Developer Command prompt (mine was called "Developer Command Prompt for VS2015")
+3. navigate to ./Geo/include/sqlite3 and run the following command:
 
+    cl sqlite3.c -link -dll -out:..\..\lib\sqlite3.dll
 
-
+This will build the sqlite3 dll and place it in lib/
