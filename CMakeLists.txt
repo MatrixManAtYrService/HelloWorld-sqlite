@@ -23,19 +23,35 @@ endif()
 # look for header files in ./include
 SET(INCLUDE_DIRS "include")
 
+# Add custom Find-.cmake path
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+
+message("CMAKE_FIND_LIBRARY_SUFFIXES:  ${CMAKE_FIND_LIBRARY_SUFFIXES}")
+
 # Use Boost Unit Test Framework
 enable_testing()
+SET(BOOST_ROOT "C:/local/boost_1_60_0")                             # FindBoost.cmake handles this on its own in the linux case
+SET(BOOST_LIBRARYDIR "C:/local/boost_1_60_0/lib32-msvc-14.0")
 find_package(Boost 1.60.0 COMPONENTS unit_test_framework REQUIRED)
 list(APPEND INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
 SET(BOOST_LINK_FLAG "-lboost_unit_test_framework")
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${BOOST_LINK_FLAG}" )
 
 # Use SQLite3
-add_library(sqlite3
-    include/sqlite3/sqlite3.c)
-set_target_properties(sqlite3 PROPERTIES LINKER_LANGUAGE C)
+find_package(SQLite3)                                               # ./cmake/FindSQLite3.cmake handles this on its own in the linux case
+if(NOT SQLite3_FOUND)
+    SET(CMAKE_FIND_LIBRARY_PREFIXES "")
+    SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a" ".dll" ".lib")
+    find_library(SQLITE3_LIBRARY NAMES sqlite3 libsqlite3-dev HINTS "${CMAKE_SOURCE_DIR}/lib")
+    if (${SQLITE3})
+        MESSAGE(STATUS "Found SQLite3")
+    else()
+        MESSAGE(STATUS "SQLite3 library not found, see dependency.md to ensure it is in the right place.")
+    endif()
+    SET(SQLITE3_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include/sqlite3")
+endif()
+list(APPEND INCLUDE_DIRS ${SQLITE3_INCLUDE_DIR})
 
-#
 find_package(Threads REQUIRED)
 
 # List source files here
@@ -46,8 +62,9 @@ set(HELLO_SOURCE
 # List test dependencies here
 add_library(testDepends 
     src/dbAccess.cpp)
+
 set_target_properties(testDepends PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries(testDepends sqlite3 ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
+target_link_libraries(testDepends ${SQLITE3_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
 
 list(REMOVE_DUPLICATES INCLUDE_DIRS)
 include_directories(${INCLUDE_DIRS})

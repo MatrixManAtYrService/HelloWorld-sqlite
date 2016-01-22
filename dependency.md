@@ -22,7 +22,6 @@ I found the ubuntu repo version to be a bit old for my taste, so I installed it 
 Start here: [https://cmake.org/download/](https://cmake.org/download/) and follow the steps (opting to add cmake to your PATH).
 The installer is pretty typical of windows installers.
 
-http://sourceforge.net/projects/boost/files/boost-binaries/1.60.0/
 
 
 ## Unit testing uses [Boost](http://www.boost.org)
@@ -47,18 +46,8 @@ To install it from source and get a newer version:
 
 ### [Installation In Windows](http://www.boost.org/doc/libs/1_60_0/more/getting_started/windows.html)
 
-
-1. Have visual studio installed (be sure to select "Visual C++", it's not a default option)
-2. Get the code from [http://www.boost.org/users/download/](http://www.boost.org/users/download/)
-3. Extract it to *folder*
-4. Open a VS Developer Command prompt (mine was called "Developer Command Prompt for VS2015")
-
-    cd folder
-    bootstrap.bat
-    b2.exe install --link=shared -- prefix=C:/
-
-The above prefix will put the libraries in C:\lib\boost_1_60_0\ Feel free to change this, but note that this path must also be included in the boost section of CMakeLists.txt so that CMake can find the libraries.
-
+1. Download the Boost prebuild binary installer from [sourceforge](http://sourceforge.net/projects/boost/files/boost-binaries/1.60.0/).
+2. While running through the install accept the default location: `C:/local/boost_1_60_0` (this is where CMakeLists.txt points)
 
 ## Database Access uses [Sqlite3](http://sqlite.org)
 
@@ -72,10 +61,20 @@ If sqlite3 is not found in this way (the Windows case), it may have to be built 
 
 ## [Installation in Windows](http://www.boost.org/doc/libs/1_60_0/more/getting_started/windows.html)
 
+### The c++ api
+
+The following steps will build the sqlite3 library and put it somwehere CMakeLists.txt is expecting it.
+
 1. Have visual studio installed (be sure to select "Visual C++", it's not a default option)
 2. Open a VS Developer Command prompt (mine was called "Developer Command Prompt for VS2015")
 3. navigate to ./Geo/include/sqlite3 and run the following command:
 
+    mkdir ..\..\lib
     cl sqlite3.c -link -dll -out:..\..\lib\sqlite3.dll
+    lib /out:../../lib/sqlite3.lib sqlite3.obj
 
-This will build the sqlite3 dll and place it in lib/
+This will build sqlite3 and place it in `lib/` which is where CMake expects it
+
+### sqlite3 itself 
+
+The following steps will build the sqlite3 library and put it somwehere CMakeLists.txt is expecting it.
