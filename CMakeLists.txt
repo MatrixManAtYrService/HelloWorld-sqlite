@@ -38,6 +38,7 @@ SET(BOOST_LINK_FLAG "-lboost_unit_test_framework")
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${BOOST_LINK_FLAG}" )
 
 # Use SQLite3
+set(SQLITE3_FOUND False)
 find_package(SQLite3)                                               # ./cmake/FindSQLite3.cmake handles this on its own in the linux case
 if(${SQLITE3_FOUND})
     MESSAGE(STATUS "Found SQLite3")
