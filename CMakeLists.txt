@@ -39,17 +39,19 @@ SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${BOOST_LINK_FLAG}" )
 
 # Use SQLite3
 find_package(SQLite3)                                               # ./cmake/FindSQLite3.cmake handles this on its own in the linux case
-if(NOT SQLite3_FOUND)
+if(${SQLITE3_FOUND})
+    MESSAGE(STATUS "Found SQLite3")
+else()
+    MESSAGE(STATUS "Did not find SQLite3 on first try")
     SET(CMAKE_FIND_LIBRARY_PREFIXES "")
     SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a" ".dll" ".lib")
     find_library(SQLITE3_LIBRARY NAMES sqlite3 libsqlite3-dev HINTS "${CMAKE_SOURCE_DIR}/lib")
-    if (${SQLITE3})
-        MESSAGE(STATUS "Found SQLite3")
-    else()
+    if (NOT ${SQLITE3_LIBRARY})
         MESSAGE(STATUS "SQLite3 library not found, see dependency.md to ensure it is in the right place.")
     endif()
-    SET(SQLITE3_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include/sqlite3")
 endif()
+
+SET(SQLITE3_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include/sqlite3")
 list(APPEND INCLUDE_DIRS ${SQLITE3_INCLUDE_DIR})
 
 find_package(Threads REQUIRED)
