@@ -18,7 +18,7 @@ if [[ $1 == -*[gG]* ]] ; then
 # -v (Visual Studio 2015)
 elif [[ $1 == -*[vV]* ]] ; then
     echo "configuring ./build/ for Visual Studio"
-    cmake .. -G "Visual Studio 14 2015 Win64"
+    cmake .. -G "Visual Studio 14 2015"
 
 # -e (Eclipse)
 elif [[ $1 == -*[eE]* ]] ; then

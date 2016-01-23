@@ -19,37 +19,24 @@
 # locations. When an earlier FIND_* succeeds, subsequent FIND_*s
 # searching for the same item do nothing. 
 
-# try to use framework on mac
-# want clean framework path, not unix compatibility path
-IF (APPLE)
-  IF (CMAKE_FIND_FRAMEWORK MATCHES "FIRST"
-      OR CMAKE_FRAMEWORK_PATH MATCHES "ONLY"
-      OR NOT CMAKE_FIND_FRAMEWORK)
-    SET (CMAKE_FIND_FRAMEWORK_save ${CMAKE_FIND_FRAMEWORK} CACHE STRING "" FORCE)
-    SET (CMAKE_FIND_FRAMEWORK "ONLY" CACHE STRING "" FORCE)
-    #FIND_PATH(SQLITE3_INCLUDE_DIR SQLite3/sqlite3.h)
-    FIND_LIBRARY(SQLITE3_LIBRARY SQLite3)
-    IF (SQLITE3_LIBRARY)
-      # FIND_PATH doesn't add "Headers" for a framework
-      SET (SQLITE3_INCLUDE_DIR ${SQLITE3_LIBRARY}/Headers CACHE PATH "Path to a file.")
-    ENDIF (SQLITE3_LIBRARY)
-    SET (CMAKE_FIND_FRAMEWORK ${CMAKE_FIND_FRAMEWORK_save} CACHE STRING "" FORCE)
-  ENDIF ()
-ENDIF (APPLE)
-
 FIND_PATH(SQLITE3_INCLUDE_DIR sqlite3.h
   "$ENV{LIB_DIR}/include"
   "$ENV{LIB_DIR}/include/sqlite"
+  "${CMAKE_SOURCE_DIR}/include"
+  "${CMAKE_SOURCE_DIR}/include/sqlite3"
   #mingw
   c:/msys/local/include
   NO_DEFAULT_PATH
   )
 FIND_PATH(SQLITE3_INCLUDE_DIR sqlite3.h)
 
+SET(CMAKE_FIND_LIBRARY_PREFIXES "" "lib")
+SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a" ".dll" ".lib")
 FIND_LIBRARY(SQLITE3_LIBRARY NAMES sqlite3 sqlite3_i PATHS
   $ENV{LIB} 
   /usr/lib 
   "$ENV{LIB_DIR}/lib"
+  "${CMAKE_SOURCE_DIR}/lib"
   #mingw
   c:/msys/local/lib
   NO_DEFAULT_PATH
