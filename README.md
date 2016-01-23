@@ -9,7 +9,7 @@ Scripts are in Bash because unix folk are likely to already have access to it, a
 
 CMake is used for build configuration.  CMakeLists.txt contains all of the parameters necessary to build the project.  It uses these to generate a build environment in ./build.  Your compiler of choice can then make whatever sort of mess it likes in that directory, and it's separated from the code.
 
-CMakeLists.txt is configured to use Boost's unit testing framework, and some sample tests have been written to indicate how it works
+CMakeLists.txt is configured to use Boost's unit testing framework, and a sample test has been written to indicate how it works.  Sqlite3 is used in that test so I can iron out linker kinks with libraries that CMake doesn't find automatically.
 
 ### How do I use it?
 
@@ -28,5 +28,27 @@ From this point how to proceed will depend on which environment you instructed C
 * `make` will put the main executable in ./build/bin
 * `make test` will put the test executables in /build/testBin and run them.
 
-Current bug:  test 2 fails when run via `make test`, but it passes when run directly via ./testBin/error_helloPrinter and I'm not sure why
+### Does it work?
+
+Kind of.
+
+#### Here's what I've tested and found to work:
+
+* Linux
+  * `./configure.sh -g` populates `./build/` with the proper files
+  * `make` builds everything without trouble
+  * The main program runs correctly
+  * The unit test passes
+* Windows
+  * `./configure.sh -v` populates `./build/` with the proper files
+  * visual studio builds everything without trouble (though we do have a few linker warnings)
+  * The main program runs correctly
+
+
+#### Here's what I'm currently struggling with:
+
+ * running `make test` fails, even though running `make` and then executing the test individually succeeds
+ * The resulting Visual Studio configuration wants `sqlite3.lib` to be in `build/` despite that CMake successfully finds the file in /lib
+ * Visual Studio builds everything just fine, but when I try to run the test I get an error:
+    `The program can't start because boost_unit_test_framework-vc140-md-gd-1_60.dll is missing from your computer.  Try reinstalling the program to fix this problem` 
 
