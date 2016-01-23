@@ -19,6 +19,8 @@ if [[ $1 == -*[gG]* ]] ; then
 elif [[ $1 == -*[vV]* ]] ; then
     echo "configuring ./build/ for Visual Studio"
     cmake .. -G "Visual Studio 14 2015"
+    cp -v ../lib/sqlite3.lib .  # this shouldn't be needed, but VS was looking in build/ for this file, and putting it there fixed it
+                                # better to have CMake configure things such that VS looks in lib/
 
 # -e (Eclipse)
 elif [[ $1 == -*[eE]* ]] ; then

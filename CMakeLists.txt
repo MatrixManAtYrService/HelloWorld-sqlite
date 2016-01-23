@@ -58,6 +58,7 @@ add_library(testDepends
 
 set_target_properties(testDepends PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(testDepends ${SQLITE3_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
+MESSAGE(STATUS "lib: " ${SQLITE3_LIBRARY})
 
 list(REMOVE_DUPLICATES INCLUDE_DIRS)
 include_directories(${INCLUDE_DIRS})
