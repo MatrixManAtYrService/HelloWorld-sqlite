@@ -46,8 +46,19 @@ To install it from source and get a newer version:
 
 ### [Installation In Windows](http://www.boost.org/doc/libs/1_60_0/more/getting_started/windows.html)
 
-1. Download the Boost prebuild binary installer from [sourceforge](http://sourceforge.net/projects/boost/files/boost-binaries/1.60.0/).
-2. While running through the install accept the default location: `C:/local/boost_1_60_0` (this is where CMakeLists.txt points)
+1. Have visual studio installed (be sure to select "Visual C++", it's not a default option)
+2. Open a VS Developer Command prompt (mine was called "Developer Command Prompt for VS2015")
+3. Download and extract the boost source (it is available [here](http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.zip/download))
+4. navigate to the `boost_1_60_0 folder` and run the following commands:
+    
+    bootstrap.bat
+
+The `-j6` (below) indicates that compilation should use six cores.  Adjust as necessary for your processor.
+
+    b2 toolset=msvc-14.0 --build-type=complete --abbreviate-paths architecture=x86 address-model=32 variant=release,debug threading=multi link=shared runtime-link=shared install -j6
+
+
+5. Go into Control Panel / System / Advanced System Settings / Environment Variables and append `;C:\Boost\lib\` to your path.
 
 ## Database Access uses [Sqlite3](http://sqlite.org)
 
