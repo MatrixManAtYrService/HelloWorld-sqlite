@@ -57,8 +57,11 @@ The `-j6` (below) indicates that compilation should use six cores.  Adjust as ne
 
     b2 toolset=msvc-14.0 --build-type=complete --abbreviate-paths architecture=x86 address-model=32 variant=release,debug threading=multi link=shared runtime-link=shared install -j6
 
-
 5. Go into Control Panel / System / Advanced System Settings / Environment Variables and append `;C:\Boost\lib\` to your path.
+
+6. Install the visual studio Boost Unit Test Adapter [Unit Test Adapter](https://visualstudiogallery.msdn.microsoft.com/5f4ae1bd-b769-410e-8238-fb30beda987f).
+
+
 
 ## Database Access uses [Sqlite3](http://sqlite.org)
 
