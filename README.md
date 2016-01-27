@@ -49,6 +49,4 @@ Kind of.
 
  * running `make test` fails, even though running `make` and then executing the test individually succeeds
  * The resulting Visual Studio configuration wants `sqlite3.lib` to be in `build/` despite that CMake successfully finds the file in /lib
- * Visual Studio builds everything just fine, but when I try to run the test I get an error:
-    `The program can't start because boost_unit_test_framework-vc140-md-gd-1_60.dll is missing from your computer.  Try reinstalling the program to fix this problem` 
 
