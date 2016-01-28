@@ -81,7 +81,7 @@ foreach(testSrc ${TEST_SRCS})
         add_executable(${testName} ${testSrc})
 
         #link to Boost libraries AND your targets and dependencies
-        target_link_libraries(${testName} ${Boost_LIBRARIES} ${SQLITE_LIBRARY} sqlite3 testDepends)
+        target_link_libraries(${testName} ${Boost_LIBRARIES} ${SQLITE_LIBRARY} testDepends)
   
 
         # Compiled test binaries go in ./testBin

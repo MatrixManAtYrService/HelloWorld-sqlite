@@ -17,16 +17,18 @@ if [[ $1 == -*[gG]* ]] ; then
 
 # -v (Visual Studio 2015)
 elif [[ $1 == -*[vV]* ]] ; then
+    # build sqlite3, if it doesn't already exist
+    cd ../tools/buildSqlite3/
+    cmd "/C buildSqlite3.bat"
+    cd ../../build/
+
+    # run cmake
     echo "configuring ./build/ for Visual Studio"
     cmake .. -G "Visual Studio 14 2015"
 
-    if [[ -a ../lib/sqlite3.lib ]]; then
-        # this shouldn't be needed, CMake should direct VS to look in the right place
-        # for some reason, visual studio ends up looking in <project root/build/ instead
-        cp -v ../lib/sqlite3.lib .  
-    else
-        echo -e "\nSQLite3 has not been built.  Go run <project root>/tools/buildSqlite3.bat as an adiministrator, then re-run this script"
-    fi
+    # sprinkle sqlite3
+    mkdir -p testBin/Debug/
+    cp -v ../tools/buildSqlite3/sqlite3.dll testBin/Debug/
 
 # -e (Eclipse)
 elif [[ $1 == -*[eE]* ]] ; then
