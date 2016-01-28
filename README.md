@@ -19,6 +19,6 @@ CMakeLists.txt is configured to use Boost's unit testing framework, and a sample
 
 ### What does it do?
 
-./build/bin/hello.exe prints "hello world".
+`./build/bin/hello.exe` prints "hello world".
 
-./build/testBin/sampleDB saves some text to a database, retrieves it, and checks to see that the right thing was saved.
+`./build/testBin/sampleDB` saves some text to a database, retrieves it, and checks to see that the right thing was saved.
