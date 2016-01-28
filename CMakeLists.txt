@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 # Use high warning levels and treat warnings as errors
 if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX /MT")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX")
 elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wconversion -pedantic -m32")
 endif()
@@ -37,7 +37,13 @@ SET(BOOST_LIBRARYDIR "C:/Boost/lib")
 SET(BOOST_INCLUDEDIR "C:/Boost/include/boost-1_60")
 find_package(Boost 1.60.0 COMPONENTS unit_test_framework REQUIRED)
 list(APPEND INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
-SET(BOOST_LINK_FLAG "-lboost_unit_test_framework")
+
+if(MSVC)                        # Microsoft uses magic to handle this
+    SET(BOOST_LINK_FLAG "")
+else()
+    SET(BOOST_LINK_FLAG "-lboost_unit_test_framework")
+endif()
+
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${BOOST_LINK_FLAG}" )
 MESSAGE(STATUS "boost flags: " ${BOOST_LINK_FLAG})
 MESSAGE(STATUS "boost libraries: " ${Boost_LIBRARIES})

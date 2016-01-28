@@ -2,6 +2,8 @@
 
 ## Configuration management goes through [CMake](https://cmake.org/).
 
+CMake puts platform-specific things in `./build/` so that developers can do whatever they want in that directory.  This keeps the source platform-independent.
+
 ### Installation In Linux
 
 I found the ubuntu repo version to be a bit old for my taste, so I installed it from source:
@@ -21,7 +23,6 @@ I found the ubuntu repo version to be a bit old for my taste, so I installed it 
 
 Start here: [https://cmake.org/download/](https://cmake.org/download/) and follow the steps (opting to add cmake to your PATH).
 The installer is pretty typical of windows installers.
-
 
 
 ## Unit testing uses [Boost](http://www.boost.org)
@@ -61,9 +62,11 @@ The `-j6` (below) indicates that compilation should use six cores.  Adjust as ne
 
 6. Install the visual studio Boost Unit Test Adapter [Unit Test Adapter](https://visualstudiogallery.msdn.microsoft.com/5f4ae1bd-b769-410e-8238-fb30beda987f).
 
+7. After building the main solution (helloWorld.sln) navigate to Test -> Windows -> Test Explorer to see your currently configured tests
+
 ## Database Access uses [Sqlite3](http://sqlite.org)
 
-If sqlite3 is not found in this way (the Windows case), it will have to be handled separately.  The code is included in `include/sqlite3` and the steps should be similar to the Windows instructions below.
+Sqlite is a lightweight database manager.  It stores the entirety of the database in a file, which simplifies things considerably compared to DBMS's that run as a service and require things like logins.
 
 ### Installation in Linux
 Run the following command:
