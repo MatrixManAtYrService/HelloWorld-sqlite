@@ -19,8 +19,14 @@ if [[ $1 == -*[gG]* ]] ; then
 elif [[ $1 == -*[vV]* ]] ; then
     echo "configuring ./build/ for Visual Studio"
     cmake .. -G "Visual Studio 14 2015"
-    cp -v ../lib/sqlite3.lib .  # this shouldn't be needed, but VS was looking in build/ for this file, and putting it there fixed it
-                                # better to have CMake configure things such that VS looks in lib/
+
+    if [[ -a ../lib/sqlite3.lib ]]; then
+        # this shouldn't be needed, CMake should direct VS to look in the right place
+        # for some reason, visual studio ends up looking in <project root/build/ instead
+        cp -v ../lib/sqlite3.lib .  
+    else
+        echo -e "\nSQLite3 has not been built.  Go run <project root>/tools/buildSqlite3.bat as an adiministrator, then re-run this script"
+    fi
 
 # -e (Eclipse)
 elif [[ $1 == -*[eE]* ]] ; then
