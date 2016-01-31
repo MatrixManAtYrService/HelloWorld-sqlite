@@ -3,7 +3,13 @@
 if [ -f ./build/.breadcrumb ] ; then
     flag=`cat  ./build/.breadcrumb`
     if [ ! -z "$flag" ]; then
-        rm -rvf ./build/
+        if [[ $flag == -*[cC]* ]] ; then
+            PROJNAME=$(pwd | sed 's#.*/\([^/]*\)$#\1#')
+            BUILDDIR="../$PROJNAME""_build"
+            rm -rvf "$BUILDDIR" 
+        else
+            rm -rvf ./build/
+        fi
         ./configure.sh "$flag"
     else
         echo "Unable to read breadcrumb, consider running ./configure.sh"

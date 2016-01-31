@@ -30,10 +30,20 @@ elif [[ $1 == -*[vV]* ]] ; then
     mkdir -p testBin/Debug/
     cp -v ../tools/buildSqlite3/sqlite3.dll testBin/Debug/
 
-# -e (Eclipse)
-elif [[ $1 == -*[eE]* ]] ; then
+# -c (eClipse)
+
+# '-e' is interpreted by bash, so we can't use it here
+elif [[ $1 == -*[cC]* ]] ; then
+    PROJNAME=$(pwd | sed 's#.*/\([^/]*\)/[^/]*$#\1#')
+    BUILDDIR="../../$PROJNAME""_build"
+
     echo "configuring ./build/ for Eclipse"
-    cmake .. -G "Eclipse CDT4 - Unix Makefiles"
+    echo "Eclipse requires that the build directory be a sibling, not a child, of the project root.  Creating $BUILDDIR" | tee README.txt
+    mkdir -p $BUILDDIR
+    cd $BUILDDIR
+    cmake "../$PROJNAME" -G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=TRUE
+    cd "../$PROJNAME/build/"
+    echo $BREADCRUMB
 
 # anything else
 else
@@ -48,7 +58,7 @@ else
     echo  "<none>                   Display this message"
     echo  "-g                       CRun cmake with no flags, puts Makefile in ./build"
     echo  "-v                       Configure build directory for Visual Studio 2015 (Win64)"
-    echo  "-e                       Configure build directory for Eclipse" 
+    echo  "-c                       Configure build directory for Eclipse" 
 
 fi
 
