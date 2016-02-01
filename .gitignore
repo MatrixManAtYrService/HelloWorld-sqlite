@@ -43,6 +43,10 @@ install_manifest.txt
 *.userosscache
 *.sln.docstates
 
+# Eclipse stuff
+.cproject
+.project
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

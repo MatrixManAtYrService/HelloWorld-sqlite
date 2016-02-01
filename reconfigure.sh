@@ -5,7 +5,7 @@ if [ -f ./build/.breadcrumb ] ; then
     if [ ! -z "$flag" ]; then
         if [[ $flag == -*[cC]* ]] ; then
             PROJNAME=$(pwd | sed 's#.*/\([^/]*\)$#\1#')
-            BUILDDIR="../$PROJNAME""_build"
+            BUILDDIR="../eclipseWorkspace/$PROJNAME"
             rm -rvf "$BUILDDIR" 
         else
             rm -rvf ./build/

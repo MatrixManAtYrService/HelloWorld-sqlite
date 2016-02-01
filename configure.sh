@@ -35,15 +35,13 @@ elif [[ $1 == -*[vV]* ]] ; then
 # '-e' is interpreted by bash, so we can't use it here
 elif [[ $1 == -*[cC]* ]] ; then
     PROJNAME=$(pwd | sed 's#.*/\([^/]*\)/[^/]*$#\1#')
-    BUILDDIR="../../$PROJNAME""_build"
+    BUILDDIR="../../eclipseWorkspace/$PROJNAME"
 
-    echo "configuring ./build/ for Eclipse"
     echo "Eclipse requires that the build directory be a sibling, not a child, of the project root.  Creating $BUILDDIR" | tee README.txt
     mkdir -p $BUILDDIR
     cd $BUILDDIR
-    cmake "../$PROJNAME" -G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=TRUE
-    cd "../$PROJNAME/build/"
-    echo $BREADCRUMB
+    cmake "../../$PROJNAME" -G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=TRUE -DCMAKE_ECLIPSE_VERSION=4.5.1
+    cd "../../$PROJNAME/build/"
 
 # anything else
 else
