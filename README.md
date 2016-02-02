@@ -7,26 +7,18 @@ This is a minimal project for use as an example of a build/test configuration th
 
 Scripts are in Bash because unix folk are likely to already have access to it, and because "git bash" is distributed with git--which means that windows users capable of cloning this repository might also have a Bash shell lying around.
 
-CMake is used for build configuration.  CMakeLists.txt contains all of the parameters necessary to build the project.  It uses these to generate a build environment in ./build.  Your compiler of choice can then make whatever sort of mess it likes in that directory, and it's separated from the code.
+CMake is used for build configuration.  CMakeLists.txt contains all of the parameters necessary to build the project.  It uses these to generate a build environment in ./build.  Your compiler/IDE of choice can then make whatever sort of mess it likes in that directory, and it's separated from the code.
 
-CMakeLists.txt is configured to use Boost's unit testing framework, and some sample tests have been written to indicate how it works
+CMakeLists.txt is configured to use Boost's unit testing framework, and a sample test has been written to indicate how it works.  Sqlite3 is used in that test so I can iron out linker kinks with libraries that CMake doesn't come preconfigured to find.
 
 ### How do I use it?
 
-#### General
+1. Clone the repository
+2. run `./configure.sh` with the appropriate flag (run without flags to see usage)
+3. Navigate to `./build/` and begin developing
 
-1. Make sure you have the [dependencies](dependency.md) installed.  
-2. Clone the repository
-5. run `configure.sh` which will give you some options
-6. run `configure.sh <flag> to indicate your environment of choice, this will create a build environment for you in the ./build folder
-7. `cd build`
+### What does it do?
 
-#### Specific
+`./build/bin/hello.exe` prints "hello world".
 
-From this point how to proceed will depend on which environment you instructed CMake to build.  If you used the `-g` flag (for Gnu Make) then...
-
-* `make` will put the main executable in ./build/bin
-* `make test` will put the test executables in /build/testBin and run them.
-
-Current bug:  test 2 fails when run via `make test`, but it passes when run directly via ./testBin/error_helloPrinter and I'm not sure why
-
+`./build/testBin/sampleDB` saves some text to a database, retrieves it, and checks to see that the right thing was saved.

@@ -2,6 +2,8 @@
 
 ## Configuration management goes through [CMake](https://cmake.org/).
 
+CMake puts platform-specific things in `./build/` so that developers can do whatever they want in that directory.  This keeps the source platform-independent.
+
 ### Installation In Linux
 
 I found the ubuntu repo version to be a bit old for my taste, so I installed it from source:
@@ -21,7 +23,6 @@ I found the ubuntu repo version to be a bit old for my taste, so I installed it 
 
 Start here: [https://cmake.org/download/](https://cmake.org/download/) and follow the steps (opting to add cmake to your PATH).
 The installer is pretty typical of windows installers.
-
 
 
 ## Unit testing uses [Boost](http://www.boost.org)
@@ -46,35 +47,46 @@ To install it from source and get a newer version:
 
 ### [Installation In Windows](http://www.boost.org/doc/libs/1_60_0/more/getting_started/windows.html)
 
-1. Download the Boost prebuild binary installer from [sourceforge](http://sourceforge.net/projects/boost/files/boost-binaries/1.60.0/).
-2. While running through the install accept the default location: `C:/local/boost_1_60_0` (this is where CMakeLists.txt points)
+1. Have visual studio installed (be sure to select "Visual C++", it's not a default option)
+2. Open a VS Developer Command prompt (mine was called "Developer Command Prompt for VS2015")
+3. Download and extract the boost source (it is available [here](http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.zip/download))
+4. navigate to the `boost_1_60_0 folder` and run the following commands:
+    
+    bootstrap.bat
+
+The `-j6` (below) indicates that compilation should use six cores.  Adjust as necessary for your processor.
+
+    b2 toolset=msvc-14.0 --build-type=complete --abbreviate-paths architecture=x86 address-model=32 variant=release,debug threading=multi link=shared runtime-link=shared install -j6
+
+5. Go into Control Panel / System / Advanced System Settings / Environment Variables and append `;C:\Boost\lib\` to your path.
+
+6. Install the visual studio Boost Unit Test Adapter [Unit Test Adapter](https://visualstudiogallery.msdn.microsoft.com/5f4ae1bd-b769-410e-8238-fb30beda987f).
+
+7. After building the main solution (helloWorld.sln) navigate to Test -> Windows -> Test Explorer to see your currently configured tests
 
 ## Database Access uses [Sqlite3](http://sqlite.org)
 
-The file `cmake/FindSQLite3.cmake` describes how to find the sqlite3 library for several standard installation paths.  If the library is installed to a standard location, cmake should find it.  CMakeLists.txt should be all set up for this.
+Sqlite is a lightweight database manager.  It stores the entirety of the database in a file, which simplifies things considerably compared to DBMS's that run as a service and require things like logins.
 
-If sqlite3 is not found in this way (the Windows case), it may have to be built separately.  The code is included in `include/sqlite3` and the steps should be similar to the Windows instructions below.
-
-## Installation in Linux
+### Installation in Linux
+Run the following command:
 
     sudo apt-get install sqlite3 libsqlite3-dev
 
-## [Installation in Windows](http://www.boost.org/doc/libs/1_60_0/more/getting_started/windows.html)
+The file `cmake/FindSQLite3.cmake` describes how to find the sqlite3 library for several standard installation paths.  If the library is installed to a standard location, cmake should find it.  CMakeLists.txt should be all set up for this.
 
-### The c++ api
+### [Installation in Windows](http://www.boost.org/doc/libs/1_60_0/more/getting_started/windows.html)
 
-The following steps will build the sqlite3 library and put it somwehere CMakeLists.txt is expecting it.
+#### The c++ api
 
-1. Have visual studio installed (be sure to select "Visual C++", it's not a default option)
-2. Open a VS Developer Command prompt (mine was called "Developer Command Prompt for VS2015")
-3. navigate to ./Geo/include/sqlite3 and run the following command:
+The Sqlite3 library is distributed under windows as two files, sqlite3.dll and a sqlite3.def  These files, along with a script to generate them, are in `./tools/buildSqlite3`
 
-    mkdir ..\..\lib
-    cl sqlite3.c -link -dll -out:..\..\lib\sqlite3.dll
-    lib /out:../../lib/sqlite3.lib sqlite3.obj
+When `./configure.sh` is run with `-v`, this script is run, and the necessary files are generated and put in ./lib/ (if they aren't already there).  No action *should* be needed, as long as you have Visual Studio installed.
 
-This will build sqlite3 and place it in `lib/` which is where CMake expects it
+Rather than adjusting your path for this project specifically, configure.sh places sqlite3.dll in ./build/testBin/Debug so that it can be found when the test that depends on it gets run.  This means you must sprinkle this file into the working directory any time that an executable that needs it is run.
 
-### sqlite3 itself 
+If you'd prefer to avoid this, you can instead adjust your PATH to point at the dll instead.
 
-The following steps will build the sqlite3 library and put it somwehere CMakeLists.txt is expecting it.
+#### The sqlite3 user interface
+
+If you would like to use the sqlite3 CLI interface to interact with the database files that sqlite3 creates, it can be found in the sqlite-tools package on [sqlite.org](http://www.sqlite.org/download.html).

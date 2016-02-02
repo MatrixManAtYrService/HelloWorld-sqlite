@@ -1,0 +1,1 @@
+sqlite3.dll and sqlite3.def were downloaded from [here](http://www.sqlite.org/download.html).  buildSqlite3.bat invokes the microsoft c++ compiler (which is up to you to install--it comes with Visual Studio) and places the files somewhere that CMake will find them.  None of this is necessary under Linux (see dependency.md).

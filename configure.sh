@@ -17,15 +17,31 @@ if [[ $1 == -*[gG]* ]] ; then
 
 # -v (Visual Studio 2015)
 elif [[ $1 == -*[vV]* ]] ; then
+    # build sqlite3, if it doesn't already exist
+    cd ../tools/buildSqlite3/
+    cmd "/C buildSqlite3.bat"
+    cd ../../build/
+
+    # run cmake
     echo "configuring ./build/ for Visual Studio"
     cmake .. -G "Visual Studio 14 2015"
-    cp -v ../lib/sqlite3.lib .  # this shouldn't be needed, but VS was looking in build/ for this file, and putting it there fixed it
-                                # better to have CMake configure things such that VS looks in lib/
 
-# -e (Eclipse)
-elif [[ $1 == -*[eE]* ]] ; then
-    echo "configuring ./build/ for Eclipse"
-    cmake .. -G "Eclipse CDT4 - Unix Makefiles"
+    # sprinkle sqlite3
+    mkdir -p testBin/Debug/
+    cp -v ../tools/buildSqlite3/sqlite3.dll testBin/Debug/
+
+# -c (eClipse)
+
+# '-e' is interpreted by bash, so we can't use it here
+elif [[ $1 == -*[cC]* ]] ; then
+    PROJNAME=$(pwd | sed 's#.*/\([^/]*\)/[^/]*$#\1#')
+    BUILDDIR="../../eclipseWorkspace/$PROJNAME"
+
+    echo "Eclipse requires that the build directory be a sibling, not a child, of the project root.  Creating $BUILDDIR" | tee README.txt
+    mkdir -p $BUILDDIR
+    cd $BUILDDIR
+    cmake "../../$PROJNAME" -G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=TRUE -DCMAKE_ECLIPSE_VERSION=4.5.1
+    cd "../../$PROJNAME/build/"
 
 # anything else
 else
@@ -40,7 +56,7 @@ else
     echo  "<none>                   Display this message"
     echo  "-g                       CRun cmake with no flags, puts Makefile in ./build"
     echo  "-v                       Configure build directory for Visual Studio 2015 (Win64)"
-    echo  "-e                       Configure build directory for Eclipse" 
+    echo  "-c                       Configure build directory for Eclipse" 
 
 fi
 

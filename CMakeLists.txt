@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 # Use high warning levels and treat warnings as errors
 if(MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX")
 elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wconversion -pedantic")
 endif()
@@ -26,16 +26,27 @@ SET(INCLUDE_DIRS "include")
 # Add custom Find-.cmake path
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
-message("CMAKE_FIND_LIBRARY_SUFFIXES:  ${CMAKE_FIND_LIBRARY_SUFFIXES}")
+# Look for dlls too
+#SET(CMAKE_FIND_LIBRARY_PREFIXES "" "lib")
+#SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a" ".dll" ".lib")
 
 # Use Boost Unit Test Framework
 enable_testing()
-SET(BOOST_ROOT "C:/local/boost_1_60_0")                             # FindBoost.cmake handles this on its own in the linux case
-SET(BOOST_LIBRARYDIR "C:/local/boost_1_60_0/lib32-msvc-14.0")
+SET(BOOST_ROOT "C:/Boost")                             # FindBoost.cmake handles this on its own in the linux case
+SET(BOOST_LIBRARYDIR "C:/Boost/lib")
+SET(BOOST_INCLUDEDIR "C:/Boost/include/boost-1_60")
 find_package(Boost 1.60.0 COMPONENTS unit_test_framework REQUIRED)
 list(APPEND INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
-SET(BOOST_LINK_FLAG "-lboost_unit_test_framework")
+
+if(MSVC)                        # Microsoft uses magic to handle this
+    SET(BOOST_LINK_FLAG "")
+else()
+    SET(BOOST_LINK_FLAG "-lboost_unit_test_framework")
+endif()
+
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${BOOST_LINK_FLAG}" )
+MESSAGE(STATUS "boost flags: " ${BOOST_LINK_FLAG})
+MESSAGE(STATUS "boost libraries: " ${Boost_LIBRARIES})
 
 # Use SQLite3
 # see ./cmake/FindSQLite3.cmake for details about where find_package looks
@@ -58,7 +69,7 @@ add_library(testDepends
 
 set_target_properties(testDepends PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(testDepends ${SQLITE3_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
-MESSAGE(STATUS "lib: " ${SQLITE3_LIBRARY})
+MESSAGE(STATUS "sqlite found: " ${SQLITE3_LIBRARY})
 
 list(REMOVE_DUPLICATES INCLUDE_DIRS)
 include_directories(${INCLUDE_DIRS})
@@ -76,7 +87,7 @@ foreach(testSrc ${TEST_SRCS})
         add_executable(${testName} ${testSrc})
 
         #link to Boost libraries AND your targets and dependencies
-        target_link_libraries(${testName} ${Boost_LIBRARIES} ${SQLITE_LIBRARY} sqlite3 testDepends)
+        target_link_libraries(${testName} ${Boost_LIBRARIES} ${SQLITE_LIBRARY} testDepends)
   
 
         # Compiled test binaries go in ./testBin
