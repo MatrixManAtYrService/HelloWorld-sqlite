@@ -13,6 +13,7 @@ CMakeLists.txt is configured to use Boost's unit testing framework, and a sample
 
 ### How do I use it?
 
+0. Make sure you have the [dependencies](dependency.md) installed.
 1. Clone the repository
 2. run `./configure.sh` with the appropriate flag (run without flags to see usage)
 3. Navigate to `./build/` and begin developing
