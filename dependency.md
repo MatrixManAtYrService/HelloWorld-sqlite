@@ -75,7 +75,9 @@ Run the following command:
 
 The file `cmake/FindSQLite3.cmake` describes how to find the sqlite3 library for several standard installation paths.  If the library is installed to a standard location, cmake should find it.  CMakeLists.txt should be all set up for this.
 
-### [Installation in Windows](http://www.boost.org/doc/libs/1_60_0/more/getting_started/windows.html)
+### Installation in Windows
+
+I've included the windows binaries (downloaded from sqlite.org) in ./tools/buildSqlite3/ and wrote a batch script for configuring them (in the same directory).  You shouldn't need to do anything here, because ./configure.sh checks to see if the libraries exist and--if they don't--invokes that script to generate them.
 
 #### The c++ api
 
