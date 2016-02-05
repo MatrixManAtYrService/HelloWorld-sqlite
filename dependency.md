@@ -15,9 +15,8 @@ I found the ubuntu repo version to be a bit old for my taste, so I installed it 
     # answer "y" if you accept the agreement
     # answer "n" because you want cmake in /usr/local/bin and not /usr/local/cmake-3.4.a-Linux-x86_64/bin
 
-    # this command should output:
-    # cmake version 3.4.1
-    cmake --version # should give 
+    cmake --version
+    # should output:  cmake version 3.4.1
 
 ### Installation in Windows
 
