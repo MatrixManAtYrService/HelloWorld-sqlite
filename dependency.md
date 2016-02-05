@@ -76,8 +76,6 @@ The file `cmake/FindSQLite3.cmake` describes how to find the sqlite3 library for
 
 ### Installation in Windows
 
-I've included the windows binaries (downloaded from sqlite.org) in ./tools/buildSqlite3/ and wrote a batch script for configuring them (in the same directory).  You shouldn't need to do anything here, because ./configure.sh checks to see if the libraries exist and--if they don't--invokes that script to generate them.
-
 #### The c++ api
 
 The Sqlite3 library is distributed under windows as two files, sqlite3.dll and a sqlite3.def  These files, along with a script to generate them, are in `./tools/buildSqlite3`
