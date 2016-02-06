@@ -34,14 +34,14 @@ Conversations with a friend indicate that the boost test module underwent signif
 
     sudo apt-get install libboost-test-dev
 
-To install it from source and get a newer version:
+To install it from source and get a newer version use the following commands.  Note that the -j# flag indicates how many proccessor cores to use for compilation (which can take a while).  If you have two cores, use `-j2`.
 
     cd
     wget http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.tar.bz2
     tar --bzip2 -xf boost_1_60_0.tar.bz2
     cd boost_1_60_0/
     ./bootstrap.sh --exec-prefix=/usr/local
-    ./b2
+    ./b2 -j#
     sudo ./b2 install
 
 ### [Installation In Windows](http://www.boost.org/doc/libs/1_60_0/more/getting_started/windows.html)
