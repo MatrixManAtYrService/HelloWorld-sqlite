@@ -6,7 +6,7 @@ CMake puts platform-specific things in `./build/` so that developers can do what
 
 ### Installation In Linux
 
-I found the ubuntu repo version to be a bit old for my taste, so I installed it from source:
+I found the ubuntu repo version to be a bit old for my taste, so I installed it from source.
 
     cd
     wget https://cmake.org/files/v3.4/cmake-3.4.1-Linux-x86_64.sh
@@ -30,17 +30,23 @@ The following steps will compile the boost libraries.  Many of them can be inclu
 
 ### [Installation In Linux](http://www.boost.org/doc/libs/1_60_0/more/getting_started/unix-variants.html)
 
-Conversations with a friend indicate that the boost test module underwent significant changes in version 1.59, and that those changes are relevant to his decision to use boost for unit testing.  As such, the ubuntu-repository version was not new enough.  If you don't care, feel free to update the version number in CMakeLists.txt and use the following command:
+Conversations with a friend indicate that the boost test module underwent significant changes in version 1.59, and that those changes are relevant to his decision to use boost for unit testing.  As such, the ubuntu-repository version was not new enough for me.  If you don't care, feel free to update the version number in CMakeLists.txt and use the following command:
 
     sudo apt-get install libboost-test-dev
 
-To install it from source and get a newer version use the following commands.  Note that the -j# flag indicates how many proccessor cores to use for compilation (which can take a while).  If you have two cores, use `-j2`.
+To install it from source (which gives you control of the version you're installing) use the following instructions instead:
 
+I found that installing `python-dev`and `libbz2-dev` populated some headers that certain boost libraries needed to build.  These libraries may not be strictly necessary for your application, so if you're ok with an incomplete build, you may skip the first command
+
+    sudo apt-get install python-dev libbz2-dev
     cd
     wget http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.tar.bz2
     tar --bzip2 -xf boost_1_60_0.tar.bz2
     cd boost_1_60_0/
     ./bootstrap.sh --exec-prefix=/usr/local
+
+Note that the `-j#` flag indicates how many proccessor cores to use for compilation (which can take a while).  If you have two cores, use `-j2`.
+    
     ./b2 -j#
     sudo ./b2 install
 
@@ -49,13 +55,10 @@ To install it from source and get a newer version use the following commands.  N
 1. Have visual studio installed (be sure to select "Visual C++", it's not a default option)
 2. Open a VS Developer Command prompt (mine was called "Developer Command Prompt for VS2015")
 3. Download and extract the boost source (it is available [here](http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.zip/download))
-4. navigate to the `boost_1_60_0 folder` and run the following commands:
+4. navigate to the `boost_1_60_0 folder` and run the following commands.  Note that the `-j#` flag below indicates how many proccessor cores to use for compilation (which can take a while).  If you have two cores, use `-j2`.
     
-    bootstrap.bat
-
-The `-j6` (below) indicates that compilation should use six cores.  Adjust as necessary for your processor.
-
-    b2 toolset=msvc-14.0 --build-type=complete --abbreviate-paths architecture=x86 address-model=32 variant=release,debug threading=multi link=shared runtime-link=shared install -j6
+        bootstrap.bat
+        b2 toolset=msvc-14.0 --build-type=complete --abbreviate-paths architecture=x86 address-model=32 variant=release,debug threading=multi link=shared runtime-link=shared install -j#
 
 5. Go into Control Panel / System / Advanced System Settings / Environment Variables and append `;C:\Boost\lib\` to your path.
 
