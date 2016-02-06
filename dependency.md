@@ -6,9 +6,12 @@ CMake puts platform-specific things in `./build/` so that developers can do what
 
 ### Installation In Linux
 
-I found the ubuntu repo version to be a bit old for my taste, so I installed it from source.
+The following command will install cmake:
 
-    cd
+    sudo apt-get install cmake
+
+I found the ubuntu repo version to be a bit old for my taste, so I installed the version from cmake.org instead:
+
     wget https://cmake.org/files/v3.4/cmake-3.4.1-Linux-x86_64.sh
     sudo chmod +x cmake-3.4.1-Linux-x86_64.sh 
     sudo ./cmake-3.4.1-Linux-x86_64.sh --prefix=/usr/local
@@ -39,11 +42,11 @@ To install it from source (which gives you control of the version you're install
 I found that installing `python-dev`and `libbz2-dev` populated some headers that certain boost libraries needed to build.  These libraries may not be strictly necessary for your application, so if you're ok with an incomplete build, you may skip the first command
 
     sudo apt-get install python-dev libbz2-dev
-    cd
     wget http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.tar.bz2
     tar --bzip2 -xf boost_1_60_0.tar.bz2
-    cd boost_1_60_0/
+    cd boost_1_60_0
     ./bootstrap.sh --exec-prefix=/usr/local
+    cd ..
 
 Note that the `-j#` flag indicates how many proccessor cores to use for compilation (which can take a while).  If you have two cores, use `-j2`.
     
