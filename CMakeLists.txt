@@ -46,47 +46,28 @@ include_directories(${INCLUDE_DIRS})
 set(HELLO_SOURCE 
     src/main.cpp
     src/helloPrinter.cpp)
+add_executable(hello.exe ${HELLO_SOURCE})
+target_link_libraries(hello.exe ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
 
-# List test dependencies here
+# dbAccess library
 add_library(dbAccess
     src/dbAccess.cpp)
-
 set_target_properties(dbAccess PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(dbAccess ${SQLITE3_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
+
+#dbAccess tests
+add_executable(test_dbAccess ${TEST_ROOT}/sampleDB.cpp)
+target_link_libraries(test_dbAccess ${Boost_LIBRARIES} ${SQLITE_LIBRARY} dbAccess)
+set_target_properties(test_dbAccess PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_BIN})
+add_test(NAME test_dbAccess WORKING_DIRECTORY ${TEST_BIN}
+         COMMAND test_dbAccess)
+
+MESSAGE(STATUS ${CMAKE_CURRENT_SOURCE_DIR}/testBin/${testName} )
 
 list(REMOVE_DUPLICATES INCLUDE_DIRS)
 include_directories(${INCLUDE_DIRS})
 
 project(helloWorld C CXX)
 list(REMOVE_DUPLICATES HELLO_SOURCE)
-add_executable(hello.exe ${HELLO_SOURCE})
-target_link_libraries(hello.exe ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
 
-add_executable(test_dbAccess ${TEST_ROOT}/sampleDB.cpp)
-target_link_libraries(test_dbAccess ${Boost_LIBRARIES} ${SQLITE_LIBRARY} dbAccess)
-set_target_properties(test_dbAccess PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/testBin)
-add_test(NAME test_dbAccess
-         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/testBin 
-         COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/testBin/${testName} )
-
-# Look for tests in ./test
-## source for this loop: http://neyasystems.com/an-engineers-guide-to-unit-testing-cmake-and-boost-unit-tests/
-#file(GLOB TEST_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} test/*.cpp)
-#foreach(testSrc ${TEST_SRCS})
-#        get_filename_component(testName ${testSrc} NAME_WE)
-#        add_executable(${testName} ${testSrc})
-#
-#        #link to Boost libraries AND your targets and dependencies
-#        target_link_libraries(${testName} ${Boost_LIBRARIES} ${SQLITE_LIBRARY} testDepends)
-#  
-#
-#        # Compiled test binaries go in ./testBin
-#        set_target_properties(${testName} PROPERTIES 
-#            RUNTIME_OUTPUT_DIRECTORY  ${CMAKE_CURRENT_SOURCE_DIR}/build/testBin)
-#
-#        #Notice the WORKING_DIRECTORY and COMMAND
-#        add_test(NAME ${testName} 
-#                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/testBin 
-#                 COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/testBin/${testName} )
-#endforeach(testSrc)
 
