@@ -42,12 +42,15 @@ include(${PROJECT_ROOT}/cmake/AddExternalLibraries.txt)
 # Specify include directories
 include_directories(${INCLUDE_DIRS})
 
-# List source files here
-set(HELLO_SOURCE 
-    src/main.cpp
+# Hello World Library
+add_library(helloPrinter
     src/helloPrinter.cpp)
-add_executable(hello.exe ${HELLO_SOURCE})
-target_link_libraries(hello.exe ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
+
+# Hello World App
+set(HELLO_SOURCE 
+    src/main.cpp)
+add_executable(hello ${HELLO_SOURCE})
+target_link_libraries(hello helloPrinter)
 
 # dbAccess library
 add_library(dbAccess
