@@ -5,6 +5,7 @@ message(STATUS "Processing ${CMAKE_CURRENT_LIST_FILE}")
 # paths in comments are relative to PROECT_ROOT, 
 # which is the directory containing this file.
 get_filename_component(PROJECT_ROOT ${CMAKE_CURRENT_LIST_FILE} DIRECTORY)
+
 set(TEST_ROOT ${PROJECT_ROOT}/test)
 set(TEST_BIN ${CMAKE_BINARY_DIR}/testBin)
 
@@ -27,44 +28,19 @@ elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wconversion -pedantic")
 endif()
 
-
 # look for header files in ./include
-SET(INCLUDE_DIRS "include")
+SET(INCLUDE_DIRS "${PROJECT_ROOT}/include")
 
 # Add custom Find-.cmake path
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_ROOT}/cmake")
 
-# Look for dlls too
-#SET(CMAKE_FIND_LIBRARY_PREFIXES "" "lib")
-#SET(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a" ".dll" ".lib")
+# Point add external libraries:
+include(${PROJECT_ROOT}/cmake/AddExternalLibraries.txt)
+# Boost unit_test_framework
+# SQLite3
 
-# Use Boost Unit Test Framework
-enable_testing()
-SET(BOOST_ROOT "C:/Boost")                             # FindBoost.cmake handles this on its own in the linux case
-SET(BOOST_LIBRARYDIR "C:/Boost/lib")
-SET(BOOST_INCLUDEDIR "C:/Boost/include/boost-1_60")
-find_package(Boost 1.60.0 COMPONENTS unit_test_framework REQUIRED)
-list(APPEND INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
-
-if(MSVC)                        # Microsoft uses magic to handle this
-    SET(BOOST_LINK_FLAG "")
-else()
-    SET(BOOST_LINK_FLAG "-lboost_unit_test_framework")
-endif()
-
-SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${BOOST_LINK_FLAG}" )
-MESSAGE(STATUS "boost flags: " ${BOOST_LINK_FLAG})
-MESSAGE(STATUS "boost libraries: " ${Boost_LIBRARIES})
-
-# Use SQLite3
-# see ./cmake/FindSQLite3.cmake for details about where find_package looks
-set(SQLITE3_FOUND False)
-find_package(SQLite3)
-
-SET(SQLITE3_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include/sqlite3")
-list(APPEND INCLUDE_DIRS ${SQLITE3_INCLUDE_DIR})
-
-find_package(Threads REQUIRED)
+# Specify include directories
+include_directories(${INCLUDE_DIRS})
 
 # List source files here
 set(HELLO_SOURCE 
