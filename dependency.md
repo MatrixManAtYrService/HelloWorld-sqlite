@@ -41,7 +41,7 @@ To install it from source (which gives you control of the version you're install
 
 I found that installing `python-dev`and `libbz2-dev` populated some headers that certain boost libraries needed to build.  These libraries may not be strictly necessary for your application, so if you're ok with an incomplete build, you may skip the first command
 
-    sudo apt-get install python-dev libbz2-dev
+    sudo apt-get install g++ bzip2 python-dev libbz2-dev
     wget http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.tar.bz2
     tar --bzip2 -xf boost_1_60_0.tar.bz2
     cd boost_1_60_0
