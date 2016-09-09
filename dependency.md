@@ -61,7 +61,7 @@ Note that the `-j#` flag indicates how many proccessor cores to use for compilat
 4. navigate to the `boost_1_60_0 folder` and run the following commands.  Note that the `-j#` flag below indicates how many proccessor cores to use for compilation (which can take a while).  If you have two cores, use `-j2`.
     
         bootstrap.bat
-        b2 toolset=msvc-14.0 --build-type=complete --abbreviate-paths architecture=x86 address-model=32 variant=release,debug threading=multi link=shared runtime-link=shared install -j#
+        b2 toolset=msvc-14.0 --build-type=complete --abbreviate-paths architecture=x86 address-model=32 variant=release,debug threading=multi link=shared runtime-link=shared,static install -j#
 
 5. Go into Control Panel / System / Advanced System Settings / Environment Variables and append `;C:\Boost\lib\` to your path.
 
